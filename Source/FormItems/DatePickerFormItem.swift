@@ -68,13 +68,19 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
 		return self
 	}
 
-	typealias SyncBlock = (_ date: Date, _ animated: Bool) -> Void
-	var syncCellWithValue: SyncBlock = { (date: Date, animated: Bool) in
-		SwiftyFormLog("sync is not overridden: \(date)")
+	typealias SyncBlock = (_ date: Date?, _ animated: Bool) -> Void
+	var syncCellWithValue: SyncBlock = { (date: Date?, animated: Bool) in
+		SwiftyFormLog("sync is not overridden")
 	}
+    var syncCellWithMinimumDate: SyncBlock = { (date: Date?, animated: Bool) in
+        SwiftyFormLog("sync is not overridden")
+    }
+    var syncCellWithMaximumDate: SyncBlock = { (date: Date?, animated: Bool) in
+        SwiftyFormLog("sync is not overridden")
+    }
 
-	internal var innerValue = Date()
-	public var value: Date {
+    internal var innerValue: Date?
+	public var value: Date? {
 		get {
 			self.innerValue
 		}
@@ -83,15 +89,21 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
 		}
 	}
 
-	public func setValue(_ date: Date, animated: Bool) {
+	public func setValue(_ date: Date?, animated: Bool) {
 		innerValue = date
 		syncCellWithValue(date, animated)
 	}
 
 	public var datePickerMode: DatePickerFormItemMode = .dateAndTime
 	public var locale: Locale? // default is Locale.current, setting nil returns to default
-	public var minimumDate: Date? // specify min/max date range. default is nil. When min > max, the values are ignored. Ignored in countdown timer mode
-	public var maximumDate: Date? // default is nil
+    public var format: String?
+    public var empty: String?
+    public var minimumDate: Date? {
+        didSet { syncCellWithMinimumDate(minimumDate, false) }
+    }
+	public var maximumDate: Date? {
+        didSet { syncCellWithMaximumDate(maximumDate, false) }
+    }
 	public var minuteInterval: Int = 1
     
     public var titleFont = UIFont.preferredFont(forTextStyle: .body)

@@ -149,6 +149,8 @@ class PopulateTableView: FormItemVisitor {
 		model.title = object.title
 		model.datePickerMode = mapDatePickerMode(object.datePickerMode)
 		model.locale = object.locale
+        model.format = object.format
+        model.empty = object.empty
 		model.minimumDate = object.minimumDate
 		model.maximumDate = object.maximumDate
 		model.minuteInterval = object.minuteInterval
@@ -184,13 +186,19 @@ class PopulateTableView: FormItemVisitor {
 
 		cellExpanded.configure(model)
 
-		object.syncCellWithValue = { [weak cell] (date: Date, animated: Bool) in
-			SwiftyFormLog("sync date \(date)")
+		object.syncCellWithValue = { [weak cell] (date: Date?, animated: Bool) in
 			cell?.setDateWithoutSync(date, animated: animated)
 		}
 
+        object.syncCellWithMinimumDate = { [weak cell] (date: Date?, animated: Bool) in
+            cell?.setMinimumDateWithoutSync(date, animated: animated)
+        }
+
+        object.syncCellWithMaximumDate = { [weak cell] (date: Date?, animated: Bool) in
+            cell?.setMaximumDateWithoutSync(date, animated: animated)
+        }
+
 		model.valueDidChange = { [weak object] (date: Date) in
-			SwiftyFormLog("value did change \(date)")
 			object?.valueDidChange(date)
 		}
 	}

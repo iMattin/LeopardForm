@@ -11,10 +11,12 @@ public class DatePickerCellModel {
 	var title: String = ""
 	var datePickerMode: UIDatePicker.Mode = .dateAndTime
 	var locale: Locale? // default is Locale.current, setting nil returns to default
+    var empty: String?
+    var format: String?
 	var minimumDate: Date? // specify min/max date range. default is nil. When min > max, the values are ignored. Ignored in countdown timer mode
 	var maximumDate: Date? // default is nil
 	var minuteInterval: Int = 1
-	var date: Date = Date()
+	var date: Date?
 	var expandCollapseWhenSelectingRow = true
 	var selectionStyle = UITableViewCell.SelectionStyle.default
     var titleFont = UIFont.preferredFont(forTextStyle: .body)
@@ -78,7 +80,7 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 		case .time:
 			return .none
 		case .date:
-			return .long
+            return .medium
 		case .dateAndTime:
 			return .short
 		case .countDownTimer:
@@ -109,12 +111,14 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 		if model.datePickerMode == .countDownTimer {
 			return "Unsupported"
 		}
-		let date = model.date
-		//SwiftyFormLog("date: \(date)")
-		let dateFormatter = DateFormatter()
+
+        guard let date = model.date else { return model.empty ?? "" }
+
+        let dateFormatter = DateFormatter()
 		dateFormatter.locale = model.resolvedLocale
 		dateFormatter.dateStyle = obtainDateStyle(model.datePickerMode)
 		dateFormatter.timeStyle = obtainTimeStyle(model.datePickerMode)
+        dateFormatter.dateFormat = model.format ?? "dd/MM/yyyy"
 		return dateFormatter.string(from: date)
 	}
 
@@ -122,13 +126,24 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 		detailTextLabel?.text = humanReadableValue
 	}
 
-	func setDateWithoutSync(_ date: Date, animated: Bool) {
-		SwiftyFormLog("set date \(date), animated \(animated)")
+	func setDateWithoutSync(_ date: Date?, animated: Bool) {
 		model.date = date
 		updateValue()
 
-		expandedCell?.datePicker.setDate(model.date, animated: animated)
+		expandedCell?.datePicker.setDate(model.date ?? Date(), animated: animated)
 	}
+
+    func setMinimumDateWithoutSync(_ date: Date?, animated: Bool) {
+        model.minimumDate = date
+
+        expandedCell?.datePicker.minimumDate = date
+    }
+
+    func setMaximumDateWithoutSync(_ date: Date?, animated: Bool) {
+        model.maximumDate = date
+
+        expandedCell?.datePicker.maximumDate = date
+    }
 
 	public func form_cellHeight(_ indexPath: IndexPath, tableView: UITableView) -> CGFloat {
         60
@@ -268,7 +283,7 @@ public class DatePickerExpandedCell: UITableViewCell, CellHeightProvider, WillDi
 		datePicker.maximumDate = model.maximumDate
 		datePicker.minuteInterval = model.minuteInterval
 		datePicker.locale = model.resolvedLocale
-		datePicker.date = model.date
+		datePicker.date = model.date ?? Date()
         if #available(iOS 13.4, *) {
             datePicker.preferredDatePickerStyle = .wheels
         }
