@@ -38,6 +38,7 @@ public struct TextFieldFormItemCellModel {
     var clearButtonMode: UITextField.ViewMode = .whileEditing
     var titleTextColor: UIColor = Colors.text
     var titleFont: UIFont = .preferredFont(forTextStyle: .body)
+    var focusedColor: UIColor?
     var detailTextColor: UIColor = Colors.secondaryText
     var detailFont: UIFont = .preferredFont(forTextStyle: .body)
     var errorFont: UIFont = .preferredFont(forTextStyle: .caption2)
@@ -385,7 +386,7 @@ public class TextFieldFormItemCell: UITableViewCell, AssignAppearance {
     }
     
     public func assignTintColors() {
-        titleLabel.textColor = tintColor
+        titleLabel.textColor = model.focusedColor ?? tintColor
     }
 
 }

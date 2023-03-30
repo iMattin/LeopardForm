@@ -92,7 +92,9 @@ public class TextFieldFormItem: FormItem, CustomizableLabel {
     public var titleFont: UIFont = .preferredFont(forTextStyle: .body)
     
     public var titleTextColor: UIColor = Colors.text
-    
+
+    public var focusedColor: UIColor?
+
     public var detailFont: UIFont = .preferredFont(forTextStyle: .body)
        
     public var detailTextColor: UIColor = Colors.secondaryText

@@ -259,7 +259,7 @@ extension TextViewCell: CellHeightProvider {
         believedHeight = value
         reloadIndexPath = indexPath
 		//SwiftyFormLog("compute height of row: \(value)")
-		return value
+        return value < 120 ? 120 : value
 	}
     
 }
