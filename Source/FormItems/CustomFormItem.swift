@@ -1,7 +1,7 @@
 // MIT license. Copyright (c) 2021 SwiftyFORM. All rights reserved.
 import UIKit
 
-public class CustomFormItem: FormItem {
+open class CustomFormItem: FormItem {
 	public struct Context {
 		public let viewController: UIViewController
 	}
