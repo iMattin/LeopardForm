@@ -198,9 +198,21 @@ class PopulateTableView: FormItemVisitor {
             cell?.setMaximumDateWithoutSync(date, animated: animated)
         }
 
+        object.syncErrorMessage = { [weak cell] (message: String?) in
+            cell?.errorMessage = message
+            return
+        }
+
 		model.valueDidChange = { [weak object] (date: Date) in
 			object?.valueDidChange(date)
 		}
+
+        model.didSelect = { [weak cell, weak object] in
+            guard object?.value == nil else { return }
+            let date = Date()
+            object?.valueDidChange(date)
+            cell?.setDateWithoutSync(date, animated: false)
+        }
 	}
 
 	func mapDatePickerMode(_ mode: DatePickerFormItemMode) -> UIDatePicker.Mode {
@@ -628,6 +640,11 @@ class PopulateTableView: FormItemVisitor {
 			cell?.setValueWithoutSync(value)
 			return
 		}
+
+        object.syncErrorMessage = { [weak cell] (message: String?) in
+            cell?.errorMessage = message
+            return
+        }
 	}
 
 	// MARK: ViewControllerFormItem

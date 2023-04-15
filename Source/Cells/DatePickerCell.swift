@@ -28,6 +28,8 @@ public class DatePickerCellModel {
 		SwiftyFormLog("date \(date)")
 	}
 
+    var didSelect: (() -> Void)?
+
 	var resolvedLocale: Locale {
 		return locale ?? Locale.current
 	}
@@ -41,7 +43,15 @@ public class DatePickerCellModel {
 This causes the inline date picker to expand/collapse
 */
 public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontCollapseWhenScrolling, AssignAppearance {
-    
+
+    var errorMessage: String? {
+        didSet {
+            guard let errorMessage else { return }
+            detailTextLabel?.text = errorMessage
+            detailTextLabel?.textColor = UIColor.red
+        }
+    }
+
 	weak var expandedCell: DatePickerExpandedCell?
 	public let model: DatePickerCellModel
 
@@ -65,7 +75,7 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 		textLabel?.text = model.title
         textLabel?.font = model.titleFont
         detailTextLabel?.font = model.detailFont
-        
+
 		updateValue()
 
 		assignDefaultColors()
@@ -107,12 +117,12 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 		}
 	}
 
-	public var humanReadableValue: String {
+	public var humanReadableValue: String? {
 		if model.datePickerMode == .countDownTimer {
 			return "Unsupported"
 		}
 
-        guard let date = model.date else { return model.empty ?? "" }
+        guard let date = model.date else { return nil }
 
         let dateFormatter = DateFormatter()
 		dateFormatter.locale = model.resolvedLocale
@@ -123,7 +133,9 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 	}
 
 	public func updateValue() {
-		detailTextLabel?.text = humanReadableValue
+        let value = humanReadableValue
+        detailTextLabel?.text = value ?? model.empty
+        detailTextLabel?.textColor = value == nil ? .gray : model.detailTextColor
 	}
 
 	func setDateWithoutSync(_ date: Date?, animated: Bool) {
@@ -154,6 +166,8 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 			//print("cell is always expanded")
 			return
 		}
+
+        model.didSelect?()
 
 		if isExpandedCellVisible {
 			_ = resignFirstResponder()
@@ -236,12 +250,12 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 
 	public func assignDefaultColors() {
         textLabel?.textColor = model.titleTextColor
-        detailTextLabel?.textColor = model.detailTextColor
+//        detailTextLabel?.textColor = Colors.text
 	}
 
 	public func assignTintColors() {
-		textLabel?.textColor = tintColor
-		detailTextLabel?.textColor = tintColor
+        textLabel?.textColor = model.titleTextColor
+//        detailTextLabel?.textColor = model.detailTextColor
 	}
 }
 

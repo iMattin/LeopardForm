@@ -28,6 +28,10 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
 	}
 
 	public var title: String = ""
+
+    public var required: Bool = false
+
+    public var requiredMessage: String = "required"
     
 	/**
 	### Collapsed
@@ -79,6 +83,8 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
         SwiftyFormLog("sync is not overridden")
     }
 
+    var syncErrorMessage: ((_ message: String?) -> Void)?
+
     internal var innerValue: Date?
 	public var value: Date? {
 		get {
@@ -121,4 +127,12 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
 		innerValue = value
 		valueDidChangeBlock(value)
 	}
+
+    public func validate() -> Bool {
+        if required && innerValue == nil {
+            syncErrorMessage?(requiredMessage)
+            return false
+        }
+        return true
+    }
 }

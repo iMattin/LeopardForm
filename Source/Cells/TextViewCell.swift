@@ -23,7 +23,14 @@ public struct TextViewCellModel {
 }
 
 public class TextViewCell: UITableViewCell, AssignAppearance {
-    
+
+    var errorMessage: String? {
+        didSet {
+            titleLabel.text = errorMessage ?? model.title
+            titleLabel.textColor = errorMessage == nil ? model.titleTextColor : UIColor.red
+        }
+    }
+
 	public let titleLabel = UILabel()
 	public let placeholderLabel = UILabel()
 	public let textView = UITextView()
@@ -246,6 +253,7 @@ extension TextViewCell: UITextViewDelegate {
 	}
 
 	public func textViewDidChange(_ textView: UITextView) {
+        errorMessage = nil
 		updateValue()
 		model.valueDidChange(textView.text)
 	}
