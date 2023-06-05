@@ -159,6 +159,7 @@ class PopulateTableView: FormItemVisitor {
         model.titleTextColor = object.titleTextColor
         model.detailFont = object.detailFont
         model.detailTextColor = object.detailTextColor
+        model.displayValue = object.displayValue
 
 		switch object.behavior {
 		case .collapsed, .expanded:

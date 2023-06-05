@@ -104,6 +104,7 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
 	public var locale: Locale? // default is Locale.current, setting nil returns to default
     public var format: String?
     public var empty: String?
+    public var displayValue: String?
     public var minimumDate: Date? {
         didSet { syncCellWithMinimumDate(minimumDate, false) }
     }

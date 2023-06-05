@@ -23,6 +23,7 @@ public class DatePickerCellModel {
     var detailFont = UIFont.preferredFont(forTextStyle: .body)
     var titleTextColor = Colors.text
     var detailTextColor = Colors.secondaryText
+    var displayValue: String?
 
 	var valueDidChange: (Date) -> Void = { (date: Date) in
 		SwiftyFormLog("date \(date)")
@@ -76,7 +77,11 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
         textLabel?.font = model.titleFont
         detailTextLabel?.font = model.detailFont
 
-		updateValue()
+        if let displayValue = model.displayValue {
+            updateTextLabel(with: displayValue)
+        } else {
+            updateValue()
+        }
 
 		assignDefaultColors()
 	}
@@ -134,9 +139,13 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 
 	public func updateValue() {
         let value = humanReadableValue
+        updateTextLabel(with: value)
+	}
+
+    private func updateTextLabel(with value: String?) {
         detailTextLabel?.text = value ?? model.empty
         detailTextLabel?.textColor = value == nil ? .gray : model.detailTextColor
-	}
+    }
 
 	func setDateWithoutSync(_ date: Date?, animated: Bool) {
 		model.date = date
