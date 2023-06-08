@@ -26,6 +26,8 @@ public class TextViewFormItem: FormItem, CustomizableTitleLabel {
 
     public var requiredMessage: String = "required"
 
+    public var isEnabled: Bool = true
+
 	typealias SyncBlock = (_ value: String) -> Void
 	var syncCellWithValue: SyncBlock = { (string: String) in
 		SwiftyFormLog("sync is not overridden")

@@ -24,6 +24,7 @@ public class DatePickerCellModel {
     var titleTextColor = Colors.text
     var detailTextColor = Colors.secondaryText
     var displayValue: String?
+    var isEnabled: Bool = true
 
 	var valueDidChange: (Date) -> Void = { (date: Date) in
 		SwiftyFormLog("date \(date)")
@@ -171,6 +172,9 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 	}
 
 	public func form_didSelectRow(indexPath: IndexPath, tableView: UITableView) {
+
+        guard model.isEnabled else { return }
+
 		if model.expandCollapseWhenSelectingRow == false {
 			//print("cell is always expanded")
 			return
@@ -259,6 +263,7 @@ public class DatePickerToggleCell: UITableViewCell, SelectRowDelegate, DontColla
 
 	public func assignDefaultColors() {
         textLabel?.textColor = model.titleTextColor
+        contentView.alpha = model.isEnabled ? 1 : 0.4
 //        detailTextLabel?.textColor = Colors.text
 	}
 

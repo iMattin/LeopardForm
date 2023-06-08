@@ -119,6 +119,8 @@ public class DatePickerFormItem: FormItem, CustomizableLabel {
     public var detailFont = UIFont.preferredFont(forTextStyle: .body)
     public var detailTextColor = Colors.secondaryText
 
+    public var isEnabled: Bool = true
+
 	public typealias ValueDidChangeBlock = (_ value: Date) -> Void
 	public var valueDidChangeBlock: ValueDidChangeBlock = { (value: Date) in
 		SwiftyFormLog("not overridden")

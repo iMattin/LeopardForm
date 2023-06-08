@@ -160,6 +160,7 @@ class PopulateTableView: FormItemVisitor {
         model.detailFont = object.detailFont
         model.detailTextColor = object.detailTextColor
         model.displayValue = object.displayValue
+        model.isEnabled = object.isEnabled
 
 		switch object.behavior {
 		case .collapsed, .expanded:
@@ -576,6 +577,7 @@ class PopulateTableView: FormItemVisitor {
         model.detailTextColor = object.titleTextColor
         model.errorFont = object.errorFont
         model.errorTextColor = object.errorTextColor
+        model.isEnabled = object.isEnabled
         
 		model.model = object
 
@@ -625,6 +627,7 @@ class PopulateTableView: FormItemVisitor {
         model.placeholderTextColor = object.placeholderTextColor
         model.titleTextColor = object.titleTextColor
         model.titleFont = object.titleFont
+        model.isEnabled = object.isEnabled
         
 		model.valueDidChange = { [weak object] (value: String) in
 			SwiftyFormLog("value \(value)")

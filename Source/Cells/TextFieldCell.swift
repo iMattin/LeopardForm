@@ -43,6 +43,7 @@ public struct TextFieldFormItemCellModel {
     var detailFont: UIFont = .preferredFont(forTextStyle: .body)
     var errorFont: UIFont = .preferredFont(forTextStyle: .caption2)
     var errorTextColor: UIColor = UIColor.red
+    var isEnabled = true
     
 	var model: TextFieldFormItem! = nil
 
@@ -75,6 +76,7 @@ public class TextFieldFormItemCell: UITableViewCell, AssignAppearance {
         titleLabel.font = model.titleFont
         textField.textColor = model.detailTextColor
         textField.font  = model.detailFont
+        textField.isEnabled = model.isEnabled
         errorLabel.font = model.errorFont
 
         errorLabel.textColor = model.errorTextColor

@@ -16,6 +16,7 @@ public struct TextViewCellModel {
     var titleFont: UIFont = .preferredFont(forTextStyle: .body)
     var titleTextColor: UIColor = Colors.text
     var placeholderTextColor: UIColor = Colors.secondaryText
+    var isEnabled = true
 
 	var valueDidChange: (String) -> Void = { (value: String) in
 		SwiftyFormLog("value \(value)")
@@ -58,6 +59,8 @@ public class TextViewCell: UITableViewCell, AssignAppearance {
 		textView.isScrollEnabled = false
 		textView.delegate = self
 		textView.textContainer.lineFragmentPadding = 0
+        textView.isEditable = model.isEnabled
+        contentView.alpha = model.isEnabled ? 1 : 0.4
 
 		if model.toolbarMode == .simple {
 			textView.inputAccessoryView = toolbar

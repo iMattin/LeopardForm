@@ -21,6 +21,7 @@ public class TextFieldFormItem: FormItem, CustomizableLabel {
 	public var secureTextEntry = false
     public var textAlignment: NSTextAlignment = .left
     public var clearButtonMode: UITextField.ViewMode = .whileEditing
+    public var isEnabled: Bool = true
 
 	public var returnKeyType: UIReturnKeyType = .default
 
